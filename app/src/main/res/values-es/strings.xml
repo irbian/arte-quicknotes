@@ -1,11 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Quick Notes</string>
     <string name="title_activity_basic">BasicActivity</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="hello">hello</string>
+    <string name="hello">Hola</string>
     <string name="title_activity_note">Note</string>
-    <string name="note.title">Title</string>
-    <string name="note.content">Content</string>
-    <string name="menu.delete">Delete</string>
-    <string name="menu.save">Save</string>
 </resources>

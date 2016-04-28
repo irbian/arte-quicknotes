@@ -1,14 +1,27 @@
 package com.arte.quicknotes.models;
 
+import java.io.Serializable;
+
 /**
  * Created by jrodgar on 27/04/2016.
  */
-public class Note {
+public class Note implements Serializable {
+    public static final int MAX_EXCERPT_LENGTH = 100;
+    private int id;
     private String title;
     private String content;
 
+
     public Note() {
 
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -32,10 +45,11 @@ public class Note {
             return "";
         }
 
-        if (content.length() < 100) {
+        if (content.length() < MAX_EXCERPT_LENGTH) {
             return content;
         }
 
-        return content.substring(0, 100);
+        return content.substring(0, MAX_EXCERPT_LENGTH);
     }
+
 }

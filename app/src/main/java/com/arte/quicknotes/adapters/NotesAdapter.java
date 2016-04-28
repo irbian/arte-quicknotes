@@ -1,6 +1,7 @@
 package com.arte.quicknotes.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +17,18 @@ import java.util.List;
  */
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> {
 
-    public List<Note> mNoteList;
-
-    public NotesAdapter(List<Note> notes) {
-        mNoteList = notes;
+    public interface Events {
+        void onNoteClicked(Note note);
     }
+
+    public List<Note> mNoteList;
+    private Events mEvents;
+
+    public NotesAdapter(List<Note> notes, Events events) {
+        mNoteList = notes;
+        mEvents = events;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
@@ -31,9 +39,17 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Note note = mNoteList.get(position);
+        final Note note = mNoteList.get(position);
         holder.noteTitle.setText(note.getTitle());
         holder.noteExcerpt.setText(note.getExcerpt());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(NotesAdapter.class.getSimpleName(), "Click en note" + note.getTitle());
+                mEvents.onNoteClicked(note);
+            }
+        });
     }
 
     @Override
