@@ -68,14 +68,14 @@ public class NoteActivity extends AppCompatActivity {
         Note note = new Note();
         String title = mTitle.getText().toString();
         String content = mContent.getText().toString();
-        if (mNote != null) {
+        if (mNote == null) {
             note.setTitle(title);
             note.setContent(content);
             NoteListMock.addNote(note);
         } else {
             mNote.setTitle(title);
             mNote.setContent(content);
-            NoteListMock.updateNote(note);
+            NoteListMock.updateNote(mNote);
         }
         finish();
     }

@@ -79,4 +79,5 @@ public class MainActivity extends AppCompatActivity implements NotesAdapter.Even
         intent.putExtras(arguments);
         startActivityForResult(intent, 0);
     }
+
 }
