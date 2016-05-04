@@ -1,10 +1,12 @@
 package com.arte.quicknotes.activities;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -78,6 +80,33 @@ public class MainActivity extends AppCompatActivity implements NotesAdapter.Even
         arguments.putSerializable(NoteActivity.PARAM_NOTE, note);
         intent.putExtras(arguments);
         startActivityForResult(intent, 0);
+    }
+
+    @Override
+    public void onNoteLongClicked(final Note note) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Confirm");
+        alert.setMessage("Are you sure to delete the record?");
+        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                NoteListMock.deleteNote(note);
+                mAdapter.notifyDataSetChanged();
+                dialog.dismiss();
+            }
+        });
+        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        alert.show();
+
+
     }
 
 }

@@ -59,9 +59,19 @@ public class NoteActivity extends AppCompatActivity {
             case R.id.action_save:
                 saveNote();
                 return true;
+            case R.id.action_delete:
+                deleteNote();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void deleteNote() {
+        if (mNote != null) {
+            NoteListMock.deleteNote(mNote);
+        }
+        finish();
     }
 
     private void saveNote() {

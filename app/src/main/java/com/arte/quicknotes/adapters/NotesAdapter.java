@@ -19,6 +19,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 
     public interface Events {
         void onNoteClicked(Note note);
+
+        void onNoteLongClicked(Note note);
     }
 
     public List<Note> mNoteList;
@@ -48,6 +50,15 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
             public void onClick(View v) {
                 Log.i(NotesAdapter.class.getSimpleName(), "Click en note" + note.getTitle());
                 mEvents.onNoteClicked(note);
+            }
+        });
+        
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Log.i(NotesAdapter.class.getSimpleName(), "Long click en note" + note.getTitle());
+                mEvents.onNoteLongClicked(note);
+                return true;
             }
         });
     }
