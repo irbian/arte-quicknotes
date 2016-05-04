@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.arte.quicknotes.NoteListMock;
 import com.arte.quicknotes.R;
 import com.arte.quicknotes.database.NotesStorage;
+import com.arte.quicknotes.db.NotesDataSource;
 import com.arte.quicknotes.models.Note;
 
 public class NoteActivity extends AppCompatActivity {
@@ -20,6 +21,7 @@ public class NoteActivity extends AppCompatActivity {
     private EditText mTitle;
     private EditText mContent;
     private Note mNote;
+    private NotesDataSource notesDataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +71,8 @@ public class NoteActivity extends AppCompatActivity {
 
     private void deleteNote() {
         if (mNote != null) {
-            NoteListMock.deleteNote(mNote);
+            //NoteListMock.deleteNote(mNote);
+            notesDataSource.deleteNote(mNote);
         }
         finish();
     }
@@ -79,13 +82,17 @@ public class NoteActivity extends AppCompatActivity {
         String title = mTitle.getText().toString();
         String content = mContent.getText().toString();
         if (mNote == null) {
-            note.setTitle(title);
-            note.setContent(content);
-            NoteListMock.addNote(note);
+//            note.setTitle(title);
+//            note.setContent(content);
+//            NoteListMock.addNote(note);
+
+            notesDataSource.createNote(title, content);
         } else {
-            mNote.setTitle(title);
-            mNote.setContent(content);
-            NoteListMock.updateNote(mNote);
+//            mNote.setTitle(title);
+//            mNote.setContent(content);
+//            NoteListMock.updateNote(mNote);
+
+            notesDataSource.updateNote(mNote.getId(), title, content);
         }
         finish();
     }
@@ -96,5 +103,8 @@ public class NoteActivity extends AppCompatActivity {
 
         mTitle = (EditText) findViewById(R.id.et_title);
         mContent = (EditText) findViewById(R.id.et_content);
+
+        notesDataSource = new NotesDataSource(this);
+        notesDataSource.open();
     }
 }

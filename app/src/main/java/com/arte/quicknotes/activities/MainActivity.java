@@ -18,11 +18,14 @@ import android.widget.Toast;
 import com.arte.quicknotes.NoteListMock;
 import com.arte.quicknotes.R;
 import com.arte.quicknotes.adapters.NotesAdapter;
+import com.arte.quicknotes.db.NotesDataSource;
 import com.arte.quicknotes.models.Note;
 
 public class MainActivity extends AppCompatActivity implements NotesAdapter.Events {
 
     NotesAdapter mAdapter;
+    private NotesDataSource notesDataSource;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,11 +35,14 @@ public class MainActivity extends AppCompatActivity implements NotesAdapter.Even
 
     @Override
     protected void onPause() {
+
+        notesDataSource.close();
         super.onPause();
     }
 
     @Override
     protected void onResume() {
+        notesDataSource.open();
         super.onResume();
         Toast.makeText(this, "Acaba de resumirse la actividad",  Toast.LENGTH_LONG).show();
     }
@@ -57,9 +63,12 @@ public class MainActivity extends AppCompatActivity implements NotesAdapter.Even
             }
         });
 
+        notesDataSource = new NotesDataSource(this);
+        notesDataSource.open();
+
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.notes_recylcer_view);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        mAdapter = new NotesAdapter(NoteListMock.getList(), this);
+        mAdapter = new NotesAdapter(notesDataSource.getAllNotes(), this);
 
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(mAdapter);
@@ -91,7 +100,8 @@ public class MainActivity extends AppCompatActivity implements NotesAdapter.Even
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                NoteListMock.deleteNote(note);
+                //NoteListMock.deleteNote(note);
+                notesDataSource.deleteNote(note);
                 mAdapter.notifyDataSetChanged();
                 dialog.dismiss();
             }

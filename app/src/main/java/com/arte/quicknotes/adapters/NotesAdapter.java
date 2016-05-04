@@ -1,5 +1,6 @@
 package com.arte.quicknotes.adapters;
 
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.arte.quicknotes.R;
+import com.arte.quicknotes.db.NotesDbHelper;
 import com.arte.quicknotes.models.Note;
 
 import java.util.List;
@@ -23,11 +25,11 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         void onNoteLongClicked(Note note);
     }
 
-    public List<Note> mNoteList;
+    public Cursor mNoteCursor;
     private Events mEvents;
 
-    public NotesAdapter(List<Note> notes, Events events) {
-        mNoteList = notes;
+    public NotesAdapter(Cursor cursor, Events events) {
+        mNoteCursor = cursor;
         mEvents = events;
     }
 
@@ -41,7 +43,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final Note note = mNoteList.get(position);
+        final Note note = getNoteById(position);
         holder.noteTitle.setText(note.getTitle());
         holder.noteExcerpt.setText(note.getExcerpt());
 
@@ -63,9 +65,21 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         });
     }
 
+    private Note getNoteById(int position) {
+        mNoteCursor.moveToPosition(position);
+        int id = mNoteCursor.getInt(mNoteCursor.getColumnIndexOrThrow(NotesDbHelper.NoteEntry._ID));
+        String title = mNoteCursor.getString(mNoteCursor.getColumnIndexOrThrow(NotesDbHelper.NoteEntry.COLUMN_NAME_TITLE));
+        String content = mNoteCursor.getString(mNoteCursor.getColumnIndexOrThrow(NotesDbHelper.NoteEntry.COLUMN_NAME_CONTENT));
+        Note note = new Note();
+        note.setId(id);
+        note.setTitle(title);
+        note.setContent(content);
+        return note;
+    }
+
     @Override
     public int getItemCount() {
-        return mNoteList.size();
+        return mNoteCursor.getCount();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
