@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements NotesAdapter.Even
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.notes_recylcer_view);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        mAdapter = new NotesAdapter(notesDataSource.getAllNotes(), this);
+        mAdapter = new NotesAdapter(notesDataSource, this);
 
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(mAdapter);
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements NotesAdapter.Even
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mAdapter.notifyDataSetChanged();
+        mAdapter.mNotifyDataSetChanged();
     }
 
     @Override
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements NotesAdapter.Even
             public void onClick(DialogInterface dialog, int which) {
                 //NoteListMock.deleteNote(note);
                 notesDataSource.deleteNote(note);
-                mAdapter.notifyDataSetChanged();
+                mAdapter.mNotifyDataSetChanged();
                 dialog.dismiss();
             }
         });

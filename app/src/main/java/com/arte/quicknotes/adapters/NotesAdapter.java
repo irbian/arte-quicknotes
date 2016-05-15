@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.arte.quicknotes.R;
+import com.arte.quicknotes.db.NotesDataSource;
 import com.arte.quicknotes.db.NotesDbHelper;
 import com.arte.quicknotes.models.Note;
 
@@ -25,11 +26,19 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         void onNoteLongClicked(Note note);
     }
 
+    public final void mNotifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        mDataSource.open();
+        mNoteCursor = mDataSource.getAllNotes();
+    }
+
     public Cursor mNoteCursor;
+    NotesDataSource mDataSource;
     private Events mEvents;
 
-    public NotesAdapter(Cursor cursor, Events events) {
-        mNoteCursor = cursor;
+    public NotesAdapter(NotesDataSource dataSource, Events events) {
+        mDataSource = dataSource;
+        mNoteCursor = mDataSource.getAllNotes();
         mEvents = events;
     }
 
